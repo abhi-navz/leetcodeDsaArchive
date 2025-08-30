@@ -1,20 +1,29 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        int freq =0, ans =0;
-        int n = nums.size();
-        for(int i=0;i<n;i++){
-            if(freq ==0){
-                ans = nums[i];
-            }
-            if(ans == nums[i]){
-                freq++;
-            }
-            else {
-                freq--;
-            }
+
+        unordered_map<int, int> mpp;
+        for(int n: nums){
+            mpp[n]++;
         }
-        return ans;
-        
+
+        int maxFreq = 0;
+        int majEl = 0;
+
+        // traversing through the map or hash table
+        for(auto el: mpp){
+            int element = el.first;
+            int count = el.second;
+
+            if(count>maxFreq){
+                maxFreq = count;
+                majEl = element;
+            }
+           
+        }
+        return majEl;
     }
+        
+        
+    
 };
