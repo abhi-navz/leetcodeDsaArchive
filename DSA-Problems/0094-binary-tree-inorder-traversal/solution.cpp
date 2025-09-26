@@ -12,21 +12,26 @@
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        if(root == NULL){
-            return {};
-        }
+        
         
         vector<int>ans;
-        // inserting the left nodes from left subtrees
-        vector<int>left = inorderTraversal(root->left);
-        ans.insert(ans.end(), left.begin(), left.end());
+        stack<TreeNode*> st;
 
-        // pushing the root
-        ans.push_back(root->val);
+        while(true){
+            if(root != nullptr){
+                st.push(root);
+                root = root->left;
 
-        // inserting the right subtree
-        vector<int> right = inorderTraversal(root->right);
-        ans.insert(ans.end(),right.begin(), right.end());
+            }
+
+            else{
+                if(st.empty() == true) break;
+                root = st.top();
+                st.pop();
+                ans.push_back(root->val);
+                root = root->right;
+            }
+        }
         
 
          return ans;
