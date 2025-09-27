@@ -11,27 +11,35 @@
  */
 class Solution {
 public:
+
+    // iterative apporach for postOrder traversal using two stacks.
     vector<int> postorderTraversal(TreeNode* root) {
-        if(root == NULL){
-            return {};
+        vector<int> result;
+        if (root == nullptr) return result;
+
+        stack<TreeNode*> s1, s2;
+        // pushing the root in s1 first.
+        s1.push(root);
+
+        while (!s1.empty()) {
+            TreeNode* node = s1.top();
+            // poping and pushing the root into 2
+            s1.pop();
+            s2.push(node);
+
+            // pushing the child of root into s1
+
+            if (node->left) s1.push(node->left);
+            if (node->right) s1.push(node->right);
         }
-        
-        vector<int>ans;
-        // inserting the left nodes from left subtrees
-        vector<int>left = postorderTraversal(root->left);
-        ans.insert(ans.end(), left.begin(), left.end());
 
-        
+        while (!s2.empty()) {
+            // poping the elemetns from s2 and storing it in result
+            result.push_back(s2.top()->val);
+            s2.pop();
+        }
 
-        // inserting the right subtree
-        vector<int> right = postorderTraversal(root->right);
-        ans.insert(ans.end(),right.begin(), right.end());
-
-        // pushing the root
-        ans.push_back(root->val);
-        
-
-         return ans;
+        return result;
         
     }
 };
