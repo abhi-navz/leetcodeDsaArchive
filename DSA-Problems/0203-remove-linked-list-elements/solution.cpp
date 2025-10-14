@@ -15,33 +15,35 @@ public:
             return head;
         }
         
-       while(head != NULL && head->val == val){
-            ListNode* temp = head;
-            head = head->next;
-            delete temp;
-        }
+       ListNode* prev = nullptr;
 
-        ListNode* temp = head;
-        ListNode* prev = nullptr;
-        
-        while(temp!= NULL){
-            if(temp->val == val){
-               ListNode* frwd = temp->next;
-               prev->next = frwd;
-               delete temp;
-               temp= frwd; // it'll keep checking for more occuerence of val in LL.
+       ListNode* curr = head;
+
+       while(curr){
+        if(curr->val == val){
+            // if the head node is the target node
+            if(prev == nullptr){
                 
-            }
-            else{
-                prev = temp;
-                temp = temp->next;
-               
+                head = head->next;
+                
+            }else{
+
+                prev->next = curr->next;
             }
 
+            curr = curr->next;
 
-            
+
+        }else{
+            prev = curr;
+            curr = curr->next;
         }
+       }
+
+
         return head;
         
     }
 };
+
+
