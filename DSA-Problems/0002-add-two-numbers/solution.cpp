@@ -10,76 +10,44 @@
  */
 class Solution {
 public:
+    ListNode* helper(ListNode* l1, ListNode* l2, int carry){
+
+        // base case: 
+        if(!l1 && !l2 && carry == 0) return nullptr;
+
+        int val1 =0;
+        int val2 = 0;
+        int total =0;
+        if(l1) {
+            val1 = l1->val;
+        }
+        if(l2){
+            val2 = l2->val;
+        }
+
+        total = val1+val2+carry;
+        int newDigit = total%10;
+        carry = total/10; // would be 1 in only as the nodes contain single digit so maximum the sum would be 18 , making the digit 8 and carry 1;
+
+        ListNode* newHead = new ListNode(newDigit);
+
+       if(l1){
+        l1 = l1->next;
+        }
+        if(l2){
+            l2 = l2->next;
+        }
+
+        newHead->next = helper(l1,l2,carry);
+
+        return newHead;
+
+    }
+
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        if (!l1 && !l2)
-            return nullptr;
-        if (!l1)
-            return l2;
-        if (!l2)
-            return l1;
 
-        int carry = 0;
-
-        ListNode* t1 = l1;
-        ListNode* t2 = l2;
-        ListNode* tl = new ListNode(t1->val + t2->val);
-        if (tl->val < 10) {
-            carry = 0;
-        } else {
-            tl->val = (tl->val) % 10;
-            carry = 1;
-        }
-        ListNode* ans = tl;
-        t1 = t1->next;
-        t2 = t2->next;
-
-        while (t1 && t2) {
-            tl->next = new ListNode(t1->val + t2->val + carry);
-            tl = tl->next;
-            if (tl->val < 10) {
-                carry = 0;
-            } else {
-                tl->val = (tl->val) % 10;
-                carry = 1;
-            }
-
-            t1 = t1->next;
-            t2 = t2->next;
-        }
-
-        if (t1 != nullptr) {
-            while (t1) {
-                tl->next = new ListNode(t1->val + carry);
-                tl = tl->next;
-                if (tl->val < 10) {
-                    carry = 0;
-                } else {
-                    tl->val = (tl->val) % 10;
-                    carry = 1;
-                }
-                t1 = t1->next;
-            }
-        }
-
-        if (t2 != nullptr) {
-            while (t2) {
-                tl->next = new ListNode(t2->val + carry);
-                tl = tl->next;
-                if (tl->val < 10) {
-                    carry = 0;
-                } else {
-                    tl->val = (tl->val) % 10;
-                    carry = 1;
-                }
-                t2 = t2->next;
-            }
-        }
-
-        if (carry == 1) {
-            ListNode* tail = new ListNode(1);
-            tl->next = tail;
-        }
-
+        ListNode* ans = helper(l1,l2,0);
         return ans;
+        
     }
 };
