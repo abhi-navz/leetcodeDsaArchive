@@ -10,62 +10,68 @@
  */
 class Solution {
 public:
-    pair<ListNode*, ListNode*> reverseK(ListNode* head, int k) {
-
-        // if k =0;
-        if (k == 0)
-            return {head, nullptr};
-
-        // checking if k nodes are present
-        ListNode* temp = head;
-        for (int i = 0; i < k; i++) {
-            if (!temp)
-                return {head, nullptr}; // not enough noded no reversal
-            temp = temp->next;
-        }
+    ListNode* revLl(ListNode* head) {
         ListNode* curr = head;
         ListNode* prev = nullptr;
         ListNode* next = nullptr;
-        int count = 0;
 
-        while (curr && count < k) {
+        while (curr) {
             next = curr->next;
             curr->next = prev;
+
             prev = curr;
             curr = next;
-            count++;
         }
 
-        return {prev, curr};
+        return prev;
     }
 
     ListNode* reverseKGroup(ListNode* head, int k) {
 
-        ListNode dummy(0);
-
-        ListNode* curr = head;
-        ListNode* prevGroupTail = &dummy;
-
-        ListNode* ans = nullptr;
-
-        while (curr) {
-            auto [newHead, nextGroupHead] = reverseK(curr, k);
-            if (!ans)
-                ans = newHead;
-            if (newHead == curr && !nextGroupHead){ // less than k nodes left;
-                prevGroupTail->next = curr;
-                break;
-            }
-                
-           
-
-            // connectiong prev grouptail to this reversed group head
-
-            prevGroupTail->next = newHead;
-            prevGroupTail = curr; // new tail is the old head;
-
-            curr = nextGroupHead;
+        if (!head) {
+            return nullptr;
         }
-        return ans;
+        if (k == 1) {
+            return head;
+        }
+
+        ListNode* temp = head;
+        int n = 0;
+        while (temp) {
+            n++;
+            temp = temp->next;
+        }
+
+        int groups = n / k;
+
+        ListNode dummy(0);
+        dummy.next = head;
+        ListNode* prev = &dummy;
+        ListNode* curr = head;
+
+        for (int i = 0; i < groups; i++) {
+
+            ListNode* groupStart = curr;
+            ListNode* groupEnd = curr;
+
+            for (int j = 0; j < k - 1; j++) {
+                groupEnd = groupEnd->next;
+            }
+
+            ListNode* nextGroupStart = groupEnd->next;
+            groupEnd->next = nullptr;
+
+            ListNode* newHead = revLl(groupStart);
+
+            ListNode* newTail = groupStart;
+
+            prev->next = newHead;
+            newTail->next = nextGroupStart;
+
+            prev = newTail;
+            curr = nextGroupStart;
+        }
+
+        return dummy.next;
     }
 };
