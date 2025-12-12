@@ -12,38 +12,34 @@
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
-
         vector<int>ans;
         if(!root) return ans;
 
-        // a map data structure to store the node val based on the levels
+        queue<pair<TreeNode*, int>> q; // node, vertical Distance
+        map<int,int> mpp; // vd, node
 
-        map<int,int> m;
-
-        // queue data structure for level order traversal 
-        queue<pair<TreeNode* , int > > q;
-
-        q.push({root, 0});
+        q.push({root,0});
         while(!q.empty()){
-
-            TreeNode* curr = q.front().first;
-            int currLevel = q.front().second;
+            TreeNode* node = q.front().first;
+            int currentVd = q.front().second;
 
             q.pop();
+            if(node->left)
+                q.push({node->left, currentVd+1});
+            if(node->right)
+                q.push({node->right, currentVd+1});   
 
-            if(curr->left) q.push({curr->left, currLevel+1});
-            if(curr->right) q.push({curr->right , currLevel+1});
+            
+            mpp[currentVd] = node->val; //update to get right side view value
+           
 
-            m[currLevel] = curr->val;
+
         }
-
-        for(auto it: m){
+        for(auto it: mpp){
             ans.push_back(it.second);
         }
 
         return ans;
-
-    
         
     }
 };
