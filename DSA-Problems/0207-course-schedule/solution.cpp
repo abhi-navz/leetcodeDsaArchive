@@ -2,43 +2,43 @@ class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
 
-        vector<int> indegree(numCourses, 0);
-        vector<vector<int>>adj(numCourses);
-        for (auto it : prerequisites) {
-            int a = it[0];
-            int b = it[1];
+        // making adjacency list and indegree array 
 
-            indegree[a]++;
-            adj[b].push_back(a);
+        vector<vector<int>>adj(numCourses);
+        vector<int>indegree(numCourses);
+
+        for(auto edge: prerequisites){
+            int u = edge[1];
+            int v = edge[0];
+
+            adj[u].push_back(v);
+            indegree[v]++;
         }
 
-        queue<int> q;
+        vector<int>topo;
+        queue<int>q;
 
-        for (int i = 0; i < numCourses; i++) {
-
-            if (indegree[i] == 0) {
+        for(int i=0; i<numCourses; i++){
+            if(indegree[i] ==0){
                 q.push(i);
             }
         }
 
-       int topo =0;
         while(!q.empty()){
             int node = q.front();
             q.pop();
-            topo++;
-
-            for(auto it: adj[node]){
-                indegree[it]--;
-                if(indegree[it] == 0){
-                    q.push(it);
+            topo.push_back(node);
+            for(int v : adj[node]){
+                indegree[v]--;
+                if(indegree[v]==0){
+                    q.push(v);
                 }
             }
         }
 
-        if(topo == numCourses ){
-            return true;
-        }
+        return topo.size() == numCourses ? true: false;
 
-        return false;
+
+        
     }
 };
