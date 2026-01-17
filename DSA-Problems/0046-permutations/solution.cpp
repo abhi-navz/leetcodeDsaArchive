@@ -1,46 +1,40 @@
 class Solution {
+
 public:
+    void solve(vector<int>& nums, vector<vector<int>>& result, int idx, int n) {
 
-    void solve(vector<int>&nums, vector<bool>&used, vector<int>&curr, vector<vector<int>>&result){
-
-        // base case: 
-        if(curr.size() == nums.size() ){
-            result.push_back(curr);
-            return ;
+        if (idx == n) {
+           
+            result.push_back(nums);
+            return;
         }
 
-        // choosing 
+        for (int i = idx; i < n; i++) {
 
-        for(int i =0; i<nums.size(); i++){
+            // swap
+            
 
-            if(used[i]) continue;
+                swap(nums[idx], nums[i]);
+            
 
-        
+            // go lower level
+            solve(nums, result, idx + 1, n);
 
-            // else mark used and add to current 
-            used[i] = true;
-            curr.push_back(nums[i]);
+            // backtrack
+           
 
-            // choose for other indexes 
-
-            solve(nums,used,curr, result);
-
-            // unchoosing 
-            curr.pop_back();
-            used[i] = false;
+                swap(nums[idx], nums[i]);
+            
         }
     }
 
     vector<vector<int>> permute(vector<int>& nums) {
 
-        vector<vector<int>>result;
-        vector<bool>used(nums.size(),false);
+        vector<vector<int>> result;
+        int n = nums.size();
+        int idx = 0;
 
-        vector<int>curr;
-
-        solve(nums,used,curr,result);
-
+        solve(nums, result, idx, n);
         return result;
-        
     }
 };
