@@ -2,36 +2,41 @@ class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
 
-        // fiding the minimum length string
-        int minLen = INT_MAX;
+        string ans = "";
 
         int n = strs.size();
+        int minLen = INT_MAX;
+
+        // calculating min length among all substrings
+
         for (int i = 0; i < n; i++) {
-            int len = strs[i].length();
-            minLen = min(len, minLen);
+            int len = strs[i].size();
+            minLen = min(minLen, len);
         }
 
-        // fiding the common prefix
+        // taking first string as reference and checking the first character of
+        // every string
+
         string ref = strs[0];
-        string result;
         int j = 0;
 
         while (j < minLen) {
             bool ok = true;
             for (int i = 1; i < n; i++) {
-
                 if (ref[j] != strs[i][j]) {
                     ok = false;
                     break;
                 }
             }
+
             if (!ok)
                 break;
-            result.push_back(ref[j]);
-
+            else {
+                ans.push_back(ref[j]);
+            }
             j++;
         }
 
-        return result;
+        return ans;
     }
 };
