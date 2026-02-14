@@ -8,25 +8,28 @@
  */
 class Solution {
 public:
-    ListNode *detectCycle(ListNode *head) {
+    ListNode* detectCycle(ListNode* head) {
+        if (!head || !head->next)
+            return nullptr;
+        ;
+        ListNode* slow = head;
+        ListNode* fast = head;
 
-        if(!head || !head->next ) return nullptr;
-
-        // we'll create a set and put the node inside it as we traverse, if we find the same node inside the set, it means there's loop and we'll simply retunn the node
-
-        unordered_set<ListNode*> st;
-        ListNode* curr = head;
-
-        while(curr){
-            if(st.find(curr) != st.end()){
-                return curr;
-
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast) {
+                if(slow == head && fast == head) return head;
+                slow = head;
+                while(slow != fast){
+                    slow = slow->next;
+                    fast = fast->next;
+                    if(slow == fast) return slow;
+                }
             }
-            st.insert(curr);
-            curr = curr->next;
-        }
-
-        return nullptr;
         
+        }
+       
+        return nullptr;
     }
 };
