@@ -14,22 +14,19 @@ public:
 
         if(!head || !head->next) return head;
 
-        ListNode* odd = head;
-        ListNode* even = head->next;
-        ListNode* evenHead = head->next;
+        ListNode *oddHead = head, *oddTail = head;
+        ListNode *evenHead = head->next, *evenTail = head->next;
 
-        while(even && even->next){
-            odd->next = even->next;
-            odd = odd->next;
 
-            even->next = odd->next;
-            even = even->next;
+        while(oddTail->next && evenTail->next){
+
+            oddTail->next = evenTail->next;
+            oddTail = oddTail->next;
+            evenTail->next = oddTail->next;
+            evenTail = evenTail->next;
         }
 
-        odd->next= evenHead;
-
-        return head;
-
-      
+        oddTail->next = evenHead;
+        return oddHead;
     }
 };
