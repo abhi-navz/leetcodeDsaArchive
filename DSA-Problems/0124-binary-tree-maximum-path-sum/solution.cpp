@@ -12,23 +12,26 @@
 class Solution {
 public:
 
-    int mps = INT_MIN;
-    int dfs(TreeNode* root) {
-        if(!root) return 0;
+    int dfs(TreeNode* root, int &mps){
+        if(!root)return 0;
 
-        int leftMps =  max(0, dfs(root->left));
-        int rightMps = max(0,dfs(root->right));
+        int leftMps = max(0,dfs(root->left,mps));
+        int rightMps = max(0,dfs(root->right,mps));
 
-        int currentMps = root->val + leftMps + rightMps;
+        int currentMps = root->val+leftMps +rightMps;
+        mps = max(mps,currentMps);
 
-        mps = max(currentMps, mps);
-        // can return only one branch along with root
-        return root->val + max(leftMps, rightMps);
-    
+        return root->val + max(leftMps,rightMps);
+
     }
+    int maxPathSum(TreeNode* root) {
 
-    int maxPathSum(TreeNode* root){
-        dfs(root);
+        int mps = INT_MIN;
+        dfs(root, mps);
         return mps;
+       
+
+
+        
     }
 };
