@@ -1,45 +1,49 @@
 class Solution {
 public:
-    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-
-        vector<int> indegree(numCourses, 0);
-        vector<vector<int>>adj(numCourses);
-        for (auto it : prerequisites) {
-            int a = it[0];
-            int b = it[1];
-
-            indegree[a]++;
-            adj[b].push_back(a);
-        }
-
+    vector<int> topoSort(int V, vector<int>& indegree,
+                         vector<vector<int>>& adj) {
         queue<int> q;
+        vector<int> ans;
 
-        for (int i = 0; i < numCourses; i++) {
-
+        for (int i = 0; i < V; i++) {
             if (indegree[i] == 0) {
                 q.push(i);
             }
         }
 
-        vector<int> topo;
-        while(!q.empty()){
+        while (!q.empty()) {
             int node = q.front();
             q.pop();
-            topo.push_back(node);
+            ans.push_back(node);
 
-            for(auto it: adj[node]){
-                indegree[it]--;
-                if(indegree[it] == 0){
-                    q.push(it);
+            for (int adjNode : adj[node]) {
+                indegree[adjNode]--;
+                if (indegree[adjNode] == 0) {
+                    q.push(adjNode);
                 }
             }
         }
 
-        if(topo.size() == numCourses ){
-            return topo;
+        return ans;
+    }
+
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+
+        vector<vector<int>> adj(numCourses);
+        vector<int> indegree(numCourses, 0);
+
+        for (auto course : prerequisites) {
+            int u = course[1];
+            int v = course[0];
+
+            adj[u].push_back(v);
+            indegree[v]++;
         }
 
+        vector<int> ans = topoSort(numCourses, indegree, adj);
+
+        if (ans.size() == numCourses)
+            return ans;
         return {};
-        
     }
 };
