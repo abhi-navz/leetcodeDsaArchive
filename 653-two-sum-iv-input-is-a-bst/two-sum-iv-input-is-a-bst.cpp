@@ -6,26 +6,31 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
- * right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    bool helper(TreeNode *root, int k, unordered_set<int>& st) {
-
-        if (!root)
-            return false;
-        int data = root->val;
-        if (st.find(k - data) != st.end()) {
-           return true;
-        }
-        st.insert(data);
-        return helper(root->left, k, st) || helper(root->right, k, st);
+    void inorder(TreeNode* root, vector<int>&arr){
+        if(!root)return;
+        inorder(root->left, arr);
+        arr.push_back(root->val);
+        inorder(root->right, arr);
     }
     bool findTarget(TreeNode* root, int k) {
-        unordered_set<int> st;
-        return helper(root, k, st);
-        
+        vector<int>arr;
+        inorder(root, arr);
+
+        int i =0, j = arr.size()-1;
+        while(i<j){   
+            int sum = arr[i]+arr[j];
+            if(sum == k)return true;
+            else if(sum>k){
+                j--;
+            }else{
+                i++;
+            }
+        }
+        return false;
     }
 };
