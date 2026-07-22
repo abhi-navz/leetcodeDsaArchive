@@ -10,27 +10,29 @@
  * };
  */
 class Solution {
-
-    TreeNode *prev, *first, *second;
-    
-    void inorder(TreeNode* curr){
-        if(!curr)return;
-        inorder(curr->left);
-        if(prev && prev->val > curr->val){
-            if(!first)
-                first = prev;
-            second = curr;    
-        }
-        prev = curr;
-        inorder(curr->right);
+    vector<TreeNode*>arr;
+    void inorder(TreeNode* root){
+        if(!root)return;
+        inorder(root->left);
+        arr.push_back(root);
+        inorder(root->right);
     }
-
 public:
+    
     void recoverTree(TreeNode* root) {
-        prev = nullptr;
-        first = nullptr;
-        second = nullptr;
+        TreeNode *first = nullptr;
+        TreeNode *second = nullptr;
+
         inorder(root);
+
+        for(int i =0; i<arr.size()-1; i++){
+            if(arr[i]->val > arr[i+1]->val){
+                if(!first)
+                    first = arr[i];
+                second = arr[i+1];    
+            }
+        }
+
         swap(first->val, second->val);
     }
 };
