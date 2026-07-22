@@ -11,26 +11,55 @@
  */
 class Solution {
 public:
-    void inorder(TreeNode* root, vector<int>&arr){
-        if(!root)return;
-        inorder(root->left, arr);
-        arr.push_back(root->val);
-        inorder(root->right, arr);
+    void pushLeft(TreeNode* root,stack<TreeNode*>&st1){
+        while(root){
+            st1.push(root);
+            root = root->left;
+        }
     }
-    bool findTarget(TreeNode* root, int k) {
-        vector<int>arr;
-        inorder(root, arr);
 
-        int i =0, j = arr.size()-1;
-        while(i<j){   
-            int sum = arr[i]+arr[j];
-            if(sum == k)return true;
-            else if(sum>k){
-                j--;
+    void pushRight(TreeNode *root, stack<TreeNode*>&st2){
+        while(root){
+            st2.push(root);
+            root = root->right;
+        }
+    }
+
+    bool helper(TreeNode* root, int k ,stack<TreeNode*>&st1, stack<TreeNode*>&st2){
+
+        while(!st1.empty() && !st2.empty()){
+            // base case
+            if(st1.top() == st2.top()){
+                return false;
+            }
+
+            
+            int top1 = st1.top()->val;
+            int top2 = st2.top()->val;
+
+            if(top1+top2 == k)return true;
+            else if(top1+top2<k){
+                TreeNode* curr = st1.top();
+                st1.pop();
+                pushLeft(curr->right,st1);
             }else{
-                i++;
+                TreeNode* curr = st2.top();
+                st2.pop();
+                pushRight(curr->left, st2);
             }
         }
         return false;
+         
+    }
+    bool findTarget(TreeNode* root, int k) {
+
+        stack<TreeNode*>st1;
+        stack<TreeNode*>st2;
+
+        pushLeft(root,st1);
+        pushRight(root,st2);
+
+        return helper(root, k ,st1, st2);
+
     }
 };
