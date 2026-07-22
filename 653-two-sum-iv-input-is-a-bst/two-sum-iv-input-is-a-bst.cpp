@@ -6,60 +6,58 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
  * };
  */
 class Solution {
-public:
-    void pushLeft(TreeNode* root,stack<TreeNode*>&st1){
-        while(root){
+
+    stack<TreeNode*> st1, st2;
+
+    void pushLeft(TreeNode* root) {
+        while (root) {
             st1.push(root);
             root = root->left;
         }
     }
 
-    void pushRight(TreeNode *root, stack<TreeNode*>&st2){
-        while(root){
+    void pushRight(TreeNode* root) {
+        while (root) {
             st2.push(root);
             root = root->right;
         }
     }
 
-    bool helper(TreeNode* root, int k ,stack<TreeNode*>&st1, stack<TreeNode*>&st2){
+    bool helper(int k) {
 
-        while(!st1.empty() && !st2.empty()){
+        while (!st1.empty() && !st2.empty()) {
             // base case
-            if(st1.top() == st2.top()){
+            if (st1.top() == st2.top()) {
                 return false;
             }
+            int sum = st1.top()->val + st2.top()->val;
 
-            
-            int top1 = st1.top()->val;
-            int top2 = st2.top()->val;
-
-            if(top1+top2 == k)return true;
-            else if(top1+top2<k){
+            if (sum == k)
+                return true;
+            else if (sum < k) {
                 TreeNode* curr = st1.top();
                 st1.pop();
-                pushLeft(curr->right,st1);
-            }else{
+                pushLeft(curr->right);
+            } else {
                 TreeNode* curr = st2.top();
                 st2.pop();
-                pushRight(curr->left, st2);
+                pushRight(curr->left);
             }
         }
         return false;
-         
     }
+
+public:
     bool findTarget(TreeNode* root, int k) {
 
-        stack<TreeNode*>st1;
-        stack<TreeNode*>st2;
+        pushLeft(root);
+        pushRight(root);
 
-        pushLeft(root,st1);
-        pushRight(root,st2);
-
-        return helper(root, k ,st1, st2);
-
+        return helper(k);
     }
 };
