@@ -2,41 +2,29 @@ class Solution {
 public:
     int findCircleNum(vector<vector<int>>& isConnected) {
 
-       
-        // fiding provinces using bfs and the matrix
-        int n = isConnected.size();
-        vector<int>vis(n,0);
+        int V = isConnected.size();
+        vector<int> vis(V, 0);
+        int count = 0;
+        queue<int> q;
 
-        vector<vector<int>>prov;
-
-
-        for(int i=0;i<n; i++ ){
-            if(!vis[i]){
-                vector<int>comp;
-                queue<int>q;
-                vis[i] = 1;
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                count++;
                 q.push(i);
+                vis[i] = 1;
 
-                while(!q.empty()){
+                while (!q.empty()) {
                     int node = q.front();
                     q.pop();
-                    comp.push_back(node);
-                    for(int j =0; j<n; j++){
-                        if(isConnected[node][j] == 1 && !vis[j]){
-                            vis[j] =1;
+                    for (int j =0; j<V; j++) {
+                        if(isConnected[node][j] && !vis[j]){
+                            vis[j] = 1;
                             q.push(j);
                         }
                     }
                 }
-
-                prov.push_back(comp);
             }
         }
-
-        int noOfProvinces = prov.size();
-        return noOfProvinces;
-
-
-        
+        return count;
     }
 };
