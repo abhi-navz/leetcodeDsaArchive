@@ -1,40 +1,42 @@
 class Solution {
 public:
-    bool dfs (int node, vector<int>&vis, vector<int>&path, vector<vector<int>>&adj){
-        vis[node] = 1;
-        path[node] = 1;
+    
+    bool dfs(int node, vector<vector<int>>&adj, vector<int>&vis, vector<int>&path, vector<int>&safe){
 
-        for(int adjNode : adj[node]){
-            if(!vis[adjNode]){
-                if(dfs(adjNode, vis, path, adj)){
-                    return true;
-                }
+        path[node] = 1;
+        vis[node] = 1;
+
+        for(int next:adj[node]){
+            if(!vis[next]){
+                if(!dfs(next,adj,vis,path,safe)) return false;
             }else{
-                if(path[adjNode] == 1)
-                    return true;
+                if(path[next]){
+                    return false;
+                }
+            }
+            
+        }
+        safe[node] = 1;
+        path[node] = 0;
+        return true;
+
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int V = graph.size();
+        vector<int>ans;
+
+        vector<int>vis(V,0);
+        vector<int>path(V,0);
+        vector<int>safe(V,0);
+
+        for(int i=0;i<V; i++){
+            if(!vis[i]){
+               dfs(i,graph,vis,path,safe);
             }
         }
 
-        path[node] = 0; // exiting the node from path 
-
-        return false;
-    }
-    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
-
-        int V = graph.size();
-        vector<int> ans;
-
-        // the nodes which are not safe will eventually go into cycle so i'll
-        // have to check which nodes deoesn't form a cycle.
-
-        vector<int> vis(V, 0);
-        vector<int> path(V, 0);
-
-        for (int i = 0; i < V; i++) {
-
-            if (!dfs(i, vis, path, graph)) {
-                ans.push_back({i});
-            }
+        for(int i=0; i<V; i++){
+            if(safe[i] == 1) ans.push_back(i);
         }
 
         return ans;
