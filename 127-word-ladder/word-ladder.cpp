@@ -2,10 +2,8 @@ class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         
-        unordered_set<string>st;
-        for(string &s : wordList){
-            st.insert(s);
-        }
+        unordered_set<string>st(wordList.begin(), wordList.end());
+        
 
         if(st.find(endWord) == st.end())
             return 0;
@@ -27,6 +25,7 @@ public:
                 for(int i =0; i<currWord.size(); i++){
                     string nextWord = currWord;
                     for(char ch = 'a'; ch<='z'; ch++){
+                        if(ch == currWord[i]) continue;
                         nextWord[i] = ch;
                         if(st.find(nextWord) != st.end()){
                             q.push(nextWord);
