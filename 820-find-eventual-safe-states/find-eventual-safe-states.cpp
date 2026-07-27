@@ -10,13 +10,10 @@ public:
                     return true;
                 }
             }else{
-                if(path[adjNode] == 1)
-                    return true;
+                if(path[adjNode] == 1)return true;
             }
         }
-
-        path[node] = 0; // exiting the node from path 
-
+        path[node] = 0;
         return false;
     }
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
@@ -27,10 +24,12 @@ public:
         // the nodes which are not safe will eventually go into cycle so i'll
         // have to check which nodes deoesn't form a cycle.
 
-        vector<int> vis(V, 0);
-        vector<int> path(V, 0);
+        
 
         for (int i = 0; i < V; i++) {
+
+            vector<int> vis(V, 0);
+            vector<int> path(V, 0);
 
             if (!dfs(i, vis, path, graph)) {
                 ans.push_back({i});
