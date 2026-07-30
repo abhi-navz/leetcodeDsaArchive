@@ -4,6 +4,7 @@ public:
         
         int spcIdx = 0;
         string ans = "";
+        ans.reserve(s.size()+spaces.size());
         for(int i =0; i<s.size(); i++){
 
             if(spcIdx< spaces.size() && spaces[spcIdx] == i){
