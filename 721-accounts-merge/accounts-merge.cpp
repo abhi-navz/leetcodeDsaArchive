@@ -66,11 +66,11 @@ public:
             }
         }
 
-        unordered_map< int, vector<string> >accToMails;
+        unordered_map< int, set<string> >accToMails;
         for(int i =0; i<n; i++){
             int pu = ds.findUP(i);
             for(int j =1; j<accounts[i].size(); j++){
-                accToMails[pu].push_back(accounts[i][j]);
+                accToMails[pu].insert(accounts[i][j]);
             }
         }
 
@@ -78,17 +78,11 @@ public:
 
         for(auto &it : accToMails){
             int accIdx = it.first;
-            vector<string>emails = it.second;
-            unordered_set<string>st ( emails.begin(),emails.end()); // removing duplicates
-            emails.resize(0);
-            
-            for(auto &e: st){
-                emails.push_back(e); // pushing the emails backs
-            }
-            sort(emails.begin(), emails.end()); //sorting
             vector<string>curr;
             curr.push_back(accounts[accIdx][0]);
-            curr.insert(curr.end(), emails.begin(),emails.end());
+            for(auto &e : it.second){
+                curr.push_back(e);
+            }
             ans.push_back(curr);
         }
 
