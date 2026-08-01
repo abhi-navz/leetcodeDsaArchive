@@ -15,15 +15,13 @@ public:
         if(!root) return;
         if(lvl == ans.size()){
             ans.push_back(root->val);
-        }else{
-             ans[lvl] = root->val;
         }
 
-        if(root->left){
-            dfs(lvl+1, root->left, ans);
-        }
         if(root->right){
             dfs(lvl+1, root->right, ans);
+        }
+        if(root->left){
+            dfs(lvl+1, root->left, ans);
         }
 
     }
