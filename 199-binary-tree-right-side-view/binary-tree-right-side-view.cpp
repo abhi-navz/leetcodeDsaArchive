@@ -13,7 +13,12 @@ class Solution {
 public:
     void dfs(int lvl, TreeNode* root, vector<int>&ans){
         if(!root) return;
-        ans[lvl] = root->val;
+        if(lvl == ans.size()){
+            ans.push_back(root->val);
+        }else{
+             ans[lvl] = root->val;
+        }
+
         if(root->left){
             dfs(lvl+1, root->left, ans);
         }
@@ -24,19 +29,9 @@ public:
     }
     vector<int> rightSideView(TreeNode* root) {
         if(!root) return {};
-        vector<int>temp(100,-200);
-        dfs(0,root,temp);
-
-        
         vector<int>ans;
-        for(int x: temp){
-           
-            if(x == -200) break;
-            ans.push_back(x);
-        }
+        dfs(0,root,ans);
 
         return ans;
-        
-
     }
 };
