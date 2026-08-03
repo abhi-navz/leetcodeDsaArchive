@@ -1,39 +1,42 @@
 class Solution {
+
+    unordered_map<int, int> pos;
+
 public:
-    bool helper(int idx, int k, vector<int>& stones, vector<vector<int>>&dp) {
+    bool helper(int idx, int k, vector<int>& stones, vector<vector<int>>& dp) {
         int n = stones.size();
-        if (idx == n-1)
+        if (idx == n - 1)
             return true;
 
-        if(dp[idx][k] != -1){
+        if (dp[idx][k] != -1) {
             return dp[idx][k]; // {0,1} false or true
-        }    
-
-        int i = idx + 1;
+        }
 
         for (int j = -1; j <= 1; j++) {
             int jump = k + j;
-             
+            if (jump <= 0)
+                continue;
 
-            while (i < n) {
-                if (stones[idx] + jump < stones[i])
-                    break;
-                else if (stones[idx] + jump == stones[i]) {
-                    if (helper(i, jump, stones,dp))
-                        return dp[i][jump] =  true;
-                }
-                i++;   
+            int nextPos = stones[idx] + jump;
+            if (pos.count(nextPos)) {
+                if (helper(pos[nextPos], jump, stones, dp))
+                    return dp[idx][k] = true;
             }
         }
 
-        return dp[idx][k] =  false;
+        return dp[idx][k] = false;
     }
 
     bool canCross(vector<int>& stones) {
+        int n = stones.size();
+        for (int i = 0; i < n; i++) {
+            pos[stones[i]] = i;
+        }
 
-        if(stones[1] != 1) return false;
+        if (stones[1] != 1)
+            return false;
 
-        vector<vector<int>>dp(2001,vector<int>(2001,-1));
-        return helper(1,1,stones,dp);
+        vector<vector<int>> dp(n, vector<int>(n+1, -1));
+        return helper(1, 1, stones, dp);
     }
 };
